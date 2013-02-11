@@ -23,6 +23,7 @@ local type = type;
 local setmetatable = setmetatable;
 local getmetatable = getmetatable;
 local setfenv = setfenv;
+local _G = _G
 
 setfenv( 1, m );
 
@@ -45,6 +46,10 @@ function class( name, base, interfaces, clz  )
 	
 	setmetatable( clz, MetaClass );
 	
+	if _G[name] == nil then
+		_G[name] = clz
+	end
+
 	return clz;
 end
 
@@ -62,6 +67,10 @@ function interface( name, interfaces, intf  )
 	rawset( intf, "__interfaces", interfaces or {} ); 		-- the interfaces
 	
 	setmetatable( intf, MetaInterface );
+
+	if _G[name] == nil then
+		_G[name] = clz
+	end
 	
 	return intf;
 end
@@ -84,7 +93,7 @@ function new( class, ... )
 	rawset( o, "__pure", true );			-- the object is pure object or being upgraded from a table
 	setmetatable( o, MetaObject );
 	-- call the construct function
-	o:construct( ... );
+	o:init( ... );
 	return o;
 end
 
@@ -99,7 +108,7 @@ function upgrade( t, class, ... )
 	rawset( o, "__pure", false);
 	setmetatable( o, MetaObject );
 	-- call the construct function in transform
-	o:construct( ... );
+	o:init( ... );
 	return o;
 end
 
@@ -112,7 +121,7 @@ function upgradeWeak( t, class )
 	rawset( o, "__class", class or Object);
 	rawset( o, "__pure", false);
 	setmetatable( o, MetaObject );
-	-- call the construct function in transform
+	-- don't call the construct function in transform
 	return o;
 end
 
