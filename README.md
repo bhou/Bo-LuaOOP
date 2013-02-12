@@ -34,6 +34,10 @@ end
 oo.interface("InterfaceB", nil)
 function InterfaceB:interfaceBFunction()
 end
+
+oo.interface("InterfaceC", {InterfaceA, InterfaceB})
+function InterfaceC:interfaceCFunction()
+end
 `````
 
 ###Create a class
