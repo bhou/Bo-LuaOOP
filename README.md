@@ -132,3 +132,39 @@ obj:instanceof(SubClass)    -- true
 obj:instanceof(ClassName)   -- true
 obj:toString()      -- return class name "SubClass"
 `````
+### upgrade
+upgrade is a feature to turn a normal lua table into an object, which gives the table 
+oop ability and meanwhile keep its own data.
+
+There are two kinds of upgrade. One is strong upgrade, which will call the constructor 
+of the class that you want your table turns to. Another one is weak upgrade, which does
+not call the constructor
+
+to turn a table, let's say *t* into an object of class *ClassA*, we can do:
+`````lua
+local t = {
+  v1 = 100,
+  v2 = 200,
+  ... -- any thing you want to be in the table
+}
+
+local upgradedT = oo.upgrade(t, ClassA, ... --[[constructor arguments for ClassA--]])
+-- now you can call any instance method defined in ClassA on upgradedT
+upgradedT:instanceMethod()
+-- or you can call method/variable defined in table t
+print(upgradedT.v1)
+`````
+or we can use weak upgrade (no constructor called to initiate the object)
+`````lua
+local wt = {
+  v1 = 100,
+  v2 = 200,
+  ... -- any thing you want to be in the table
+}
+
+local upgradedWT = oo.upgradeWeak(wt, ClassA) -- no constructor arguments
+-- now you can call any instance method defined in ClassA on upgradedT
+upgradedWT:instanceMethod()
+-- or you can call method/variable defined in table wt
+print(upgradedWT.v1)
+
