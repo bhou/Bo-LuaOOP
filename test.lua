@@ -76,3 +76,28 @@ print(childObject:instanceof(ChildClass))		-- output should be true
 print(baseObject:toString())	-- output name should be class name
 print(childObject:toString())	-- output name should be class name
 
+-- test upgrade
+local t = {
+	variable1 = 10,
+	variable2 = 100,
+}
+
+local upgradedT = oo.upgrade(t, ChildClass, 1)
+print(upgradedT.variable1) 		-- output should be 10
+print(upgradedT.variable2) 		-- output should be 100
+print(upgradedT.a) 		-- output should be 2
+upgradedT:print()		-- output should be 2
+print(upgradedT:getClassName())	-- output should be ChildClass
+
+-- weak upgrade (no constructor called)
+local wt = {
+	variable1 = 10,
+	variable2 = 100,
+}
+local upgradedWT = oo.upgradeWeak(wt, ChildClass)
+print(upgradedWT.variable1) 		-- output should be 10
+print(upgradedWT.variable2) 		-- output should be 100
+print(upgradedWT.a) 		-- output should be 10 (the default value defined in parent class)
+upgradedWT:print()		-- output should be 10 (the default value defined in parent class)
+print(upgradedT:getClassName())	-- output should be ChildClass
+
