@@ -24,6 +24,18 @@ OOP features
 
 Usage
 -----------
+copy the directory **bhou/oo/*** to your lua path,
+
+to load the module, use
+`````lua
+local oo = require("bhou.oo.base")
+`````
+
+this module does not pollute the global table. 
+
+
+Document
+-----------
 ### Create interface
 `````lua
 local oo = require("bhou.oo.base")
@@ -39,7 +51,6 @@ oo.interface("InterfaceC", {InterfaceA, InterfaceB})
 function InterfaceC:interfaceCFunction()
 end
 `````
-
 ###Create a class
 
 `````lua
