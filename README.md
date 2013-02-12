@@ -1,5 +1,5 @@
 Introduction
-============
+------------
 
 Bo-Lua OOP is a Java-like Lua Object Oriented Programming (OOP) implementation. 
 Its purpose is to give the power of the Object-Oriented Programming to Lua and at the same time 
@@ -8,8 +8,7 @@ are supported by Bo-Lua OOP. Unlike the other Lua OOP implementation, Bo-Lua OOP
 inheritance through interface, which is from the concept of Java. The implemented features of Bo-Lua 
 OOP are listed below:
 
-OOP features
-============
+###OOP features
 
 - Objects and Classes: **supported**
 - Encapsulation: *not supported*
@@ -21,6 +20,16 @@ OOP features
 - Method Overloading: *not supported, but could be easily implemented*
 - Operator Overloading: *not supported, but could be easily implemented*
 - Properties Exceptions: *not supported*
+
+###Other features
+
+- Super: **supported**
+- Instanceof: **supported**
+- GetClassName: **supported**
+
+###Todo list
+- Reflection support
+- Utils Classes
 
 Usage
 -----------
