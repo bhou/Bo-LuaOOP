@@ -121,3 +121,10 @@ obj:print() -- 101, automatically call the parent's method if not defined in sub
 obj:add(5)
 obj:print() -- 107
 `````
+### object build-in method
+`````lua
+obj:getClassName()  -- "SubClass"
+obj:instanceof(SubClass)    -- true
+obj:instanceof(ClassName)   -- true
+obj:toString()      -- return class name "SubClass"
+`````
