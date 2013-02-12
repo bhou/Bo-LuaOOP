@@ -65,4 +65,14 @@ childObject:add(100)
 childObject:print()		-- output should be 102
 
 
+-- test build-in method
+print(baseObject:getClassName())	-- output should be BaseClass
+print(childObject:getClassName())	-- output should be ChildClass
+
+print(baseObject:instanceof(BaseClass))		-- output should be true
+print(childObject:instanceof(BaseClass))		-- output should be true
+print(childObject:instanceof(ChildClass))		-- output should be true
+
+print(baseObject:toString())	-- output name should be class name
+print(childObject:toString())	-- output name should be class name
 
