@@ -31,6 +31,9 @@ OOP are listed below:
 - Reflection support
 - Utils Classes
 
+###Lua version
+Currently supports Lua 5.1.*
+
 Usage
 -----------
 copy the directory **bhou/oo/*** to your lua path,
