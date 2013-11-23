@@ -32,7 +32,7 @@ OOP are listed below:
 - Utils Classes
 
 ###Lua version
-Currently supports Lua 5.2.*
+Currently supports Lua 5.2.x and 5.1.x
 
 
 Usage
