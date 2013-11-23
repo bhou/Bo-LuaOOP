@@ -25,21 +25,19 @@ local getmetatable = getmetatable;
 local setfenv = setfenv;
 local _G = _G
 
-setfenv( 1, m );
-
 --- create a new class
 -- @param name 						the new class name
 -- @param base						the base class
 -- @param interfaces			the list of interfaces
 -- @param clz							the class table 
-function class( name, base, interfaces, clz  )
+function m.class( name, base, interfaces, clz  )
 	if 'string' ~= type( name ) then
 		return nil;
 	end
 	
 	-- init all the default field of the new class
-	clz = clz or {};
-	rawset( clz, "__isclass", true); 		-- the interfaces
+	local clz = clz or {};
+	rawset( clz, "__isclass", true); 		-- if it is a class
 	rawset( clz, "__name", name );	-- the name of the class
 	rawset( clz, "__super", base or Object );		-- the super class
 	rawset( clz, "__interfaces", interfaces or {}); 		-- the interfaces
@@ -57,12 +55,12 @@ end
 -- @param name 						the new interface name
 -- @param interfaces			the list of interfaces
 -- @param intf							the interface table 
-function interface( name, interfaces, intf  )
+function m.interface( name, interfaces, intf  )
 	if 'string' ~= type( name ) then
 		return nil;
 	end
 	
-	intf = intf or {};
+	local intf = intf or {};
 	rawset( intf, "__name", name );	-- the name of the class
 	rawset( intf, "__interfaces", interfaces or {} ); 		-- the interfaces
 	
@@ -77,7 +75,7 @@ end
 --- create an instance of a given class
 -- @param class					the class to be instansiate
 -- @param ...							the parameters used to init the object
-function new( class, ... )
+function m.new( class, ... )
 	if class == nil then
 		return nil;
 	end
@@ -91,6 +89,8 @@ function new( class, ... )
 	rawset( o, "__data", data);
 	rawset( o, "__class", class );
 	rawset( o, "__pure", true );			-- the object is pure object or being upgraded from a table
+	
+	class.super = class.__super;
 	setmetatable( o, MetaObject );
 	-- call the construct function
 	o:init( ... );
@@ -101,7 +101,7 @@ end
 -- @param t							the table to be transformed
 -- @param class					the class to be instansiate, if nil, Object will be the default class
 -- @param ...							the parameters used to init the object
-function upgrade( t, class, ... )
+function m.upgrade( t, class, ... )
 	local o = {};
 	rawset( o, "__data", t);
 	rawset( o, "__class", class or Object);
@@ -115,7 +115,7 @@ end
 --- upgrade a table into an object without calling the construct
 -- @param t							the table to be transformed
 -- @param class					the class to be instansiate, if nil, Object will be the default class
-function upgradeWeak( t, class )
+function m.upgradeWeak( t, class )
 	local o = {};
 	rawset( o, "__data", t);
 	rawset( o, "__class", class or Object);
@@ -127,7 +127,7 @@ end
 
 --- determine if the object is a valide plxpls style object
 -- @param o	the object
-function isValidObject( o )
+function m.isValidObject( o )
 	if o == nil then
 		return false;
 	end

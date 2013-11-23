@@ -132,7 +132,7 @@ end
 
 function SubClass:add(b)
   self.a = self.a + 1
-  super.add(self, b)    -- call super method
+  SubClass.super.add(self, b)    -- call super method
 end
 
 function SubClass:divide(b)

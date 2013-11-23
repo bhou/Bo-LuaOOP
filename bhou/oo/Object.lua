@@ -33,8 +33,6 @@ local tostring = tostring
 
 -- set the sandbox
 
--- lock the environment
-setfenv( 1, Object )
 
 -------------------------------------------------------------------
 -- internal fields
@@ -47,21 +45,21 @@ __isclass = true;
 ---
 -- constructors
 -- @param ...				the contructor params
-function construct( self, ... )
+function Object.init( self, ... )
 end
 
 ---
 -- finalize the object
-function finalize( self )
+function Object.finalize( self )
 end
 
 --- get the class of the object
 -- if the object is a class the meta class is returned
-function getClass( self )
+function Object.getClass( self )
 	return self.__class;
 end
 --- get the name of the class for the object
-function getClassName( self )
+function Object.getClassName( self )
 	return self.__class.__name;
 end
 
@@ -84,20 +82,20 @@ local function _visitInheritTree( class, visit, continue )
 	_visitInheritTree( class.__super, visit, continue );
 	-- visit the interfaces
 	local i;
-	for i = 1,  table.getn( class.__interfaces ) do
+	for i = 1,  #(class.__interfaces) do
 		_visitInheritTree( class.__interfaces[i], visit, continue );
 	end
 end
 --- visit inherit tree
 -- @param visit			the visit function with the form "bool function ( class or interface )"
-function visitInheritTree( self, visit )
+function Object.visitInheritTree( self, visit )
 	local continue = {true};
 	_visitInheritTree( self.__class, visit, continue );
 end
 
 --- determine if the object is an instance of given class
 -- @param class			the plxpls style class
-function instanceof( self, class )
+function Object.instanceof( self, class )
 	if class == nil or class.__name == nil then
 		return false;
 	end
@@ -117,16 +115,16 @@ function instanceof( self, class )
 end
 
 --- clone the object
-function clone( self, ... )
+function Object.clone( self, ... )
 	-- todo
 end
 
-function serialize()
+function Object.serialize()
 
 end
 
 --- serialize to string, this will be called by lua build in tostring function
-function toString( self, ... )
+function Object.toString( self, ... )
 	return self.__class.__name  --.."@"..self;
 end
 

@@ -13,28 +13,26 @@ local setfenv = setfenv;
 local getfenv = getfenv;
 
 
-setfenv( 1, m );
-
 -- search all in the table
-function searchAll( k, plist )
+function m.searchAll( k, plist )
 	local i,v;
-	for i = 1, table.getn( plist ) do
+	for i = 1, #plist do
 		v = plist[i][k];
 		if v then return v end;
 	end
 end
 
 -- search all functions in the table
-function searchFunction( k, plist )
+function m.searchFunction( k, plist )
 	local i,v;
-	for i = 1, table.getn( plist ) do
+	for i = 1, #plist do
 		v = plist[i][k];
 		if 'function' == type(v) then return v end;
 	end
 end
 
 -- search all elements in the table
-function searchElement( k, plist )
+function m.searchElement( k, plist )
 	local i,v;
 	for i = 1, table.getn( plist ) do
 		v = plist[i][k];
@@ -43,7 +41,7 @@ function searchElement( k, plist )
 end
 
 -- copy a table
-function copyTable( dest, src )
+function m.copyTable( dest, src )
 	if 'table' ~= type(src) or 'table' ~= type( dest ) then
 		return nil;
 	end
@@ -56,9 +54,8 @@ function copyTable( dest, src )
 	return dest;
 end
 
-
 -- print a table
-function printTable( src )
+function m.printTable( src )
 	if 'table' ~= type(src) then
 		return nil;
 	end

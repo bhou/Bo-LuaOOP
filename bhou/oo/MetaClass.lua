@@ -11,9 +11,7 @@ local setfenv = setfenv;
 local setmetatable = setmetatable;
 local print = print;
 
-setfenv( 1, mt );
-
-__index = function( t, k )
+mt.__index = function( t, k )
 	-- 1. determine if t has the __super field
 	if t.__super == nil then
 		return nil;
@@ -35,20 +33,11 @@ __index = function( t, k )
 	return v;
 end
 
-__newindex = function( t, k, v )
-	if t.__super ~= nil and type( v ) == "function" then
-		-- reset the function v's env to support super
-		local oldenv = getfenv( v );
-		local newenv = setmetatable(
-			{super = t.__super},
-			{__index = oldenv, __newindex = oldenv} );
-		setfenv( v, newenv );
-	end
-	
+mt.__newindex = function( t, k, v )
 	rawset(t, k, v);
 end
 
-__eq = function( t1, t2 )
+mt.__eq = function( t1, t2 )
 	if t1 == nil or t2 == nil then
 		return false;
 	end

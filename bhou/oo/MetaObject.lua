@@ -14,8 +14,6 @@ local print = print;
 local tostring = tostring;
 local pairs = pairs;
 
-setfenv( 1, mt );
-
 
 --- determine if the object is a valide plxpls style object
 --- this function is just the same as in oo.base
@@ -39,7 +37,7 @@ end
 --- deep copy a table without metatable
 -- @param	t		the table to be copied
 -- @return 	the copy table
-function deepCopyTable( t )
+function mt.deepCopyTable( t )
 	if isValidObject( t ) then
 		return t;
 	end
@@ -74,7 +72,7 @@ end
 
 
 -- control the index behavior
-__index = function( t, k )
+mt.__index = function( t, k )
 	-- 1. determine if t has the __data field
 	if t.__data == nil then
 		return nil;
@@ -115,7 +113,7 @@ __index = function( t, k )
 end
 
 -- control the newindex behavior
-__newindex = function( t, k, v )
+mt.__newindex = function( t, k, v )
 	-- 1. determine if t has the __data field
 	if t.__data == nil then
 		return;
@@ -123,14 +121,6 @@ __newindex = function( t, k, v )
 
 	-- 2. check the type of v
 	if type( v ) == "function" then
-		if t.__class.__super ~= nil then
-			-- reset the function v's env to support super
-			local oldenv = getfenv( v );		-- get the old env
-			local newenv = setmetatable(
-				{super = t.__class.__super},
-				{__index = oldenv, __newindex = oldenv} );
-			setfenv( v, newenv );
-		end
 		rawset( t, k, v );
 	else
 		rawset( t.__data, k, v );
@@ -138,10 +128,8 @@ __newindex = function( t, k, v )
 end
 
 -- control the to string behavior, this will be called by lua build in tostring function
---[[
-__tostring = function( t )
+mt.__tostring = function( t )
 	return t:toString();
 end
---]]
 
 return mt;

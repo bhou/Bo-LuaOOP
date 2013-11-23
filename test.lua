@@ -1,103 +1,167 @@
-local oo = require("bhou.oo.base")
+--- unit test for Bo-LuaOOP
+-- @author BHOU
 
-require("testInherit")
-
---[[
-define a class
---]]
-
--- a simple class 
-ClassA = oo.class("ClassA")
-
-ClassA.D = 100
-
--- define ClassA's constructor
-function ClassA:init(c)
-	-- attribute
-	self.result = 0
-	self.c = c
-end
-
--- instance method
-function ClassA:add(a, b)
-	self.result = a + b + self.c
-end
-
-function ClassA:print()
-	print(self.result)
-end
-
-function ClassA:printD()
-	print(ClassA.D)		-- access the static attribute
-end
-
+-- require 'bhou.oo' -- if you put '?.init.lua' in your lua path, you can use this to init the oo lib
+require 'bhou.oo.init'	-- this will register 'oo' as a global variable
+local class = oo.class	-- shortcut for class declaration
+local new = oo.new			-- shortcut for new an object
+local interface = oo.interface	-- shortcut for interface declaration
 
 --[[
-run the test 
+	util function for test
 --]]
+local function assertEquals(expected, value)
+	assert(expected == value, "[Fail] expected '"..expected.."', but got '"..value.."'")
+	print('[Pass]', expected, value)
+end
 
--- create an instance of ClassA
-local objA = oo.new(ClassA, 10)
-objA:add(1, 5)
-objA:print()		-- result should be 16
-objA:printD()		-- result should be 100
-print(ClassA.D)		-- output should be 100
+local function assertNil(value)
+	if value ~= nil then print( "[Fail] expected 'nil', but got '"..value.."'") return end
+	print('[Pass]', nil, value)
+end
+
+--[[
+	define classes and interfaces used in the test
+--]]
+-- define parent class, all defined in the definition
+local Parent = class('Parent', nil, nil, {
+	a = 1,		-- properties, can be inherited in the children
+	
+	add = function(self, b)
+		self.a = self.a + b	
+		return self.a
+	end,
+
+	minus = function(self, b)
+		self.a = self.a - b	
+		return self.a
+	end,
+	
+	multiple = function(self, b)
+		self.a = self.a * b	
+		return self.a
+	end,
+	
+	getA = function(self)
+		return self.a
+	end
+})
+
+-- define child class, put method outside of class definition
+local Child = class('Child', Parent, nil, {
+	b = 10;
+})
+
+function Child:add(b)	-- override parent's method
+	self.a = self.a + self.b + b
+	return self.a
+end
+
+function Child:add2(b)	-- use self.super to access super method
+	self.a = Child.super.add(self, b) + self.b
+	return self.a
+end
+
+-- define interface
+local Interface = class('Interf')
+function Interface:divide(b)	-- interface function without implementation
+end
+
+function Interface:divide2()	-- interface function with implementation
+	self.a = self.a/2
+	return self.a
+end
+
+function Interface:divide5()	-- interface function with implementation
+	self.a = self.a/5
+	return self.a
+end
+
+-- define child2 with interface
+local Child2 = class('Child2', Parent, {Interface})
+function Child2:divide(b)
+	self.a = self.a/b
+	return self.a
+end
+
+function Child2:divide2()
+	self.a = self.a / 4
+	return self.a
+end
+
+-- define GrandChild
+local GrandChild = class('GrandChild', Child, {Interface})
+function GrandChild:testSuperInterface()
+	return GrandChild.super.divide5(self)	-- this will fail, because the super Child does not have divide5 implemented
+end
+
+local GrandChild2 = class('GrandChild', Child2, {Interface})
+function GrandChild2:testSuperInterface()
+	return GrandChild2.super.divide5(self)
+end
 
 
--- test base class
-local baseObject = oo.new(BaseClass, 1)
-baseObject:double()	
-baseObject:print()		-- output should be 2
+--[[--------------------------------------------------------------------
+	test begins here
+--]]--------------------------------------------------------------------
+-- create parent object
+print('Parent test')
+local parent = new(Parent)
+assertEquals(1, parent.a)
+assertEquals(1, parent:getA())
+assertEquals(10, parent:add(9))
+assertEquals(5, parent:minus(5))
+assertEquals(25, parent:multiple(5))
+assertNil(parent.b)
 
--- test child class
-local childObject = oo.new(ChildClass, 1)
-childObject:double()
-childObject:print()		-- output should be 4
+print('Finshed testing parent\n')
 
-print(childObject.a) 	-- output should be 4
-print(childObject.c)	-- output should be nil
+-- create child object
+print('Child test')
+local child = new(Child)
+assertEquals(1, child.a)
+assertEquals(10, child.b)
+assertEquals(20, child:add(9))
+assertEquals(39, child:add2(9))
+assertEquals(34, child:minus(5))
+assertEquals(170, child:multiple(5))
 
+print('Finshed testing child\n')
 
--- test interface
-childObject:divide(2)
-childObject:print()		-- output should be 2
-childObject:add(100)
-childObject:print()		-- output should be 102
+print('Interface test')
+local child2 = new(Child2)
+assertEquals(1, child2.a)
+assertEquals(1, child2:getA())
+assertEquals(10, child2:add(9))
+assertEquals(5, child2:minus(5))
+assertEquals(50, child2:multiple(10))
+assertEquals(2, child2:divide(25))
+assertEquals(20, child2:multiple(10))
+assertEquals(5, child2:divide2())	-- use child2's method, so actually divide by 4
+assertEquals(1, child2:divide5())	-- use interface method implement
 
+print('Finished testing interface\n')
 
--- test build-in method
-print(baseObject:getClassName())	-- output should be BaseClass
-print(childObject:getClassName())	-- output should be ChildClass
+print('GrandChild test')
+local grandChild = new(GrandChild)	-- since grand child overrides nothing, the test is the same as the child
+assertEquals(1, grandChild.a)
+assertEquals(10, grandChild.b)
+assertEquals(20, grandChild:add(9))
+assertEquals(39, grandChild:add2(9))
+assertEquals(34, grandChild:minus(5))
+assertEquals(170, grandChild:multiple(5))
 
-print(baseObject:instanceof(BaseClass))		-- output should be true
-print(childObject:instanceof(BaseClass))		-- output should be true
-print(childObject:instanceof(ChildClass))		-- output should be true
+local grandChild2 = new(GrandChild2)	-- since grand child overrides nothing, the test is the same as the child
+assertEquals(1, grandChild2.a)
+assertEquals(1, grandChild2:getA())
+assertEquals(10, grandChild2:add(9))
+assertEquals(5, grandChild2:minus(5))
+assertEquals(50, grandChild2:multiple(10))
+assertEquals(2, grandChild2:divide(25))
+assertEquals(20, grandChild2:multiple(10))
+assertEquals(5, grandChild2:divide2())	-- use child2's method, so actually divide by 4
+assertEquals(1, grandChild2:divide5())	-- use interface method implement
+assertEquals(100, grandChild2:multiple(100))
+assertEquals(20, grandChild2:testSuperInterface())
 
-print(baseObject:toString())	-- output name should be class name
-print(childObject:toString())	-- output name should be class name
-
--- test upgrade
-local t = {
-	variable1 = 10,
-	variable2 = 100,
-}
-
-local upgradedT = oo.upgrade(t, ChildClass, 1)
-print(upgradedT.variable1) 		-- output should be 10
-print(upgradedT.variable2) 		-- output should be 100
-print(upgradedT.a) 		-- output should be 2
-upgradedT:print()		-- output should be 2
-print(upgradedT:getClassName())	-- output should be ChildClass
-
--- weak upgrade (no constructor called)
-local wt = {
-	variable1 = 10,
-	variable2 = 100,
-}
-local upgradedWT = oo.upgradeWeak(wt, ChildClass)
-print(upgradedWT.variable1) 		-- output should be 10
-print(upgradedWT.variable2) 		-- output should be 100
-print(upgradedWT.a) 		-- output should be 10 (the default value defined in parent class)
-upgradedWT:print()		-- output should be 10 (the default value defined in parent class)
-print(upgradedT:getClassName())	-- output should be ChildClass
-
+print('LuaOOP works well!')

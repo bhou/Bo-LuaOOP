@@ -7,9 +7,7 @@ local util = require( "bhou.oo.Util" );
 local type = type;
 local rawset = rawset;
 
-setfenv( 1, mt );
-
-__index = function( t, k )
+mt.__index = function( t, k )
 	-- 1. determine if t has the __super field
 	if t.__interfaces == nil then
 		return nil;
