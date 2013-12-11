@@ -164,4 +164,10 @@ assertEquals(1, grandChild2:divide5())	-- use interface method implement
 assertEquals(100, grandChild2:multiple(100))
 assertEquals(20, grandChild2:testSuperInterface())
 
+local reflection = require 'bhou.oo.Reflection'
+local funcs = reflection.functions(grandChild)
+for k, v in pairs(funcs) do
+	print(k, v)
+end
+
 print('LuaOOP works well!')
