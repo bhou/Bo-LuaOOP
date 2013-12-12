@@ -43,9 +43,13 @@ to load the module, use
 `````lua
 local oo = require("bhou.oo.base")
 `````
+this way does not pollute the global table. 
 
-this module does not pollute the global table. 
-
+if you include ?/init.lua to your lua path, you can load the module by using
+`````lua
+require 'bhou.oo'
+`````
+This way will automatically register a global table 'oo', more details see init.lua
 
 Document
 -----------
@@ -191,4 +195,19 @@ local upgradedWT = oo.upgradeWeak(wt, ClassA) -- no constructor arguments
 upgradedWT:instanceMethod()
 -- or you can call method/variable defined in table wt
 print(upgradedWT.v1)
+``````
+
+### Reflection
+Since any object/class is a table as well, you can access any function, data in the object/class. A util module is provided to help you access some meta information of the object/class/interface. To use it, require it by :
+
+`````lua
+local reflection = require 'bhou.oo.Reflection'
+`````
+
+Currently there is only one method in reflection module: listFunction, which returns a list of name-function pair of the object, including the functions of its ancestor. See the end of the test.lua
+
+`````lua
+reflection.listFunction(obj)
+`````
+
 
