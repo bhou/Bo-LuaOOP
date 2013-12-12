@@ -204,10 +204,10 @@ Since any object/class is a table as well, you can access any function, data in 
 local reflection = require 'bhou.oo.Reflection'
 `````
 
-Currently there is only one method in reflection module: listFunction, which returns a list of name-function pair of the object, including the functions of its ancestor. See the end of the test.lua
+Currently there is only one method in reflection module: ***functions***, which returns a list of name-function pair of the object, including the functions of its ancestor. See the end of the test.lua
 
 `````lua
-reflection.listFunction(obj)
+reflection.functions(obj)
 `````
 
 
