@@ -170,4 +170,6 @@ for k, v in pairs(funcs) do
 	print(k, v)
 end
 
+return -1	-- test if this fails the travis test
+
 print('LuaOOP works well!')
