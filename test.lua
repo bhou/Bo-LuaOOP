@@ -139,7 +139,7 @@ print('Finshed testing child\n')
 
 print('Interface test')
 local child2 = new(Child2)
-assertEquals(1+1, child2.a)
+assertEquals(1, child2.a)
 assertEquals(1, child2:getA())
 assertEquals(10, child2:add(9))
 assertEquals(5, child2:minus(5))
@@ -179,8 +179,9 @@ for k, v in pairs(funcs) do
 	print(k, v)
 end
 
-print('LuaOOP works well!')
-
-os.exit(allPass)
-
+if allPass then
+	print('LuaOOP works well!')
+else
+	os.exit(allPass)
+end
 
