@@ -116,7 +116,7 @@ end
 
 --- clone the object
 function Object.clone( self, ... )
-	-- todo
+	-- todo in the future
 end
 
 function Object.serialize()
