@@ -172,6 +172,6 @@ end
 
 print('LuaOOP works well!')
 
-return -1	-- test if this fails the travis test
+os.exit(false)	-- test if this fails the travis test
 
 
