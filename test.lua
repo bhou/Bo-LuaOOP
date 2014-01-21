@@ -12,12 +12,20 @@ local allPass = true
 	util function for test
 --]]
 local function assertEquals(expected, value)
-	assert(expected == value, "[Fail] expected '"..expected.."', but got '"..value.."'")
+	if expected ~= value then
+		print( "[Fail] expected '"..expected.."', but got '"..value.."'" )
+		allPass = false
+		return
+	end
 	print('[Pass]', expected, value)
 end
 
 local function assertNil(value)
-	if value ~= nil then print( "[Fail] expected 'nil', but got '"..value.."'") return end
+	if value ~= nil then 
+		print( "[Fail] expected 'nil', but got '"..value.."'") 
+		allPass = false
+		return 
+	end
 	print('[Pass]', nil, value)
 end
 
@@ -131,7 +139,7 @@ print('Finshed testing child\n')
 
 print('Interface test')
 local child2 = new(Child2)
-assertEquals(1, child2.a)
+assertEquals(1+1, child2.a)
 assertEquals(1, child2:getA())
 assertEquals(10, child2:add(9))
 assertEquals(5, child2:minus(5))
@@ -163,7 +171,7 @@ assertEquals(20, grandChild2:multiple(10))
 assertEquals(5, grandChild2:divide2())	-- use child2's method, so actually divide by 4
 assertEquals(1, grandChild2:divide5())	-- use interface method implement
 assertEquals(100, grandChild2:multiple(100))
-assertEquals(20+1, grandChild2:testSuperInterface())
+assertEquals(20, grandChild2:testSuperInterface())
 
 local reflection = require 'bhou.oo.Reflection'
 local funcs = reflection.functions(grandChild)
