@@ -120,7 +120,7 @@ function Object.clone( self, ... )
 end
 
 function Object.serialize()
-
+	-- todo
 end
 
 --- serialize to string, this will be called by lua build in tostring function
