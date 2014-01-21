@@ -7,6 +7,7 @@ local class = oo.class	-- shortcut for class declaration
 local new = oo.new			-- shortcut for new an object
 local interface = oo.interface	-- shortcut for interface declaration
 
+local allPass = true
 --[[
 	util function for test
 --]]
@@ -162,7 +163,7 @@ assertEquals(20, grandChild2:multiple(10))
 assertEquals(5, grandChild2:divide2())	-- use child2's method, so actually divide by 4
 assertEquals(1, grandChild2:divide5())	-- use interface method implement
 assertEquals(100, grandChild2:multiple(100))
-assertEquals(20, grandChild2:testSuperInterface())
+assertEquals(20+1, grandChild2:testSuperInterface())
 
 local reflection = require 'bhou.oo.Reflection'
 local funcs = reflection.functions(grandChild)
@@ -172,6 +173,6 @@ end
 
 print('LuaOOP works well!')
 
-os.exit(false)	-- test if this fails the travis test
+os.exit(allPass)
 
 
