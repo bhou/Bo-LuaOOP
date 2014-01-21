@@ -1,5 +1,8 @@
-Introduction
+
+Introduction 
 ------------
+
+[![Build Status](https://travis-ci.org/bhou/Bo-LuaOOP.png?branch=master)](https://travis-ci.org/bhou/Bo-LuaOOP)
 
 Bo-Lua OOP is a Java-like Lua Object Oriented Programming (OOP) implementation. 
 Its purpose is to give the power of the Object-Oriented Programming to Lua and at the same time 
