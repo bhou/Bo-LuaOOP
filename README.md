@@ -35,7 +35,7 @@ OOP are listed below:
 - Utils Classes
 
 ###Lua version
-Currently supports Lua 5.2.x and 5.1.x
+Currently supports Lua 5.3.x, 5.2.x and 5.1.x
 
 
 Usage
