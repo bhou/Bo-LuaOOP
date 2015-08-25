@@ -67,7 +67,7 @@ function m.interface( name, interfaces, intf  )
 	setmetatable( intf, MetaInterface );
 
 	if _G[name] == nil then
-		_G[name] = clz
+		_G[name] = intf
 	end
 	
 	return intf;
