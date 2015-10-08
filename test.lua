@@ -29,6 +29,16 @@ local function assertNil(value)
 	print('[Pass]', nil, value)
 end
 
+local function assertNotNil(value)
+	if value ~= nil then 
+		print('[Pass]', nil, value)
+		return
+	end
+
+	print( "[Fail] expected Not 'nil', but got 'nil'") 
+	allPass = false
+end
+
 --[[
 	define classes and interfaces used in the test
 --]]
@@ -72,7 +82,7 @@ function Child:add2(b)	-- use self.super to access super method
 end
 
 -- define interface
-local Interface = class('Interf')
+local Interface = interface('Interf')
 function Interface:divide(b)	-- interface function without implementation
 end
 
@@ -113,6 +123,14 @@ end
 --[[--------------------------------------------------------------------
 	test begins here
 --]]--------------------------------------------------------------------
+print 'Global registry test'
+assertNil(_G['NotExistedClass'])
+assertNotNil(_G['Parent'])
+assertNotNil(_G['Child'])
+assertNotNil(_G['GrandChild'])
+assertNotNil(_G['Interf'])
+
+
 -- create parent object
 print('Parent test')
 local parent = new(Parent)
@@ -179,9 +197,12 @@ for k, v in pairs(funcs) do
 	print(k, v)
 end
 
+print()
+
 if allPass then
 	print('LuaOOP works well!')
 else
+	print('At least one test fails!')
 	os.exit(allPass)
 end
 
