@@ -29,9 +29,9 @@ OOP are listed below:
 - Super: **supported**
 - Instanceof: **supported**
 - GetClassName: **supported**
+- Reflection: **supported**
 
 ###Todo list
-- Reflection support
 - Utils Classes
 
 ###Lua version
